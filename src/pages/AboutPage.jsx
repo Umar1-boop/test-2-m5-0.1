@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import illustration from '../assets/illustration.svg'
+import img from '../assets/img1.png'
 
 const VALUES = [
   { n: '01.', title: 'Просто и эффективно', text: 'Наше приложение объединяет удобство и мощный функционал: создавайте задачи, отмечайте выполненные и управляйте своим временем.' },
@@ -18,7 +19,7 @@ export default function AboutPage() {
           </p>
           <Link to="/" className="btn-outline mt-6 inline-block px-6">Перейти к задачам</Link>
         </div>
-        <img src={illustration} alt="Иллюстрация: планирование задач" className="mx-auto w-full max-w-md" />
+        <img src={img} alt="Иллюстрация: планирование задач" className="mx-auto w-full max-w-md" />
       </section>
 
       <section className="mt-16 text-center">

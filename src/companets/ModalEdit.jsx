@@ -1,17 +1,19 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { PRIORITIES } from '../priority.js'
 
 const schema = yup.object({
   title: yup.string().trim().required('*Укажите название!'),
   description: yup.string().trim().required('*Укажите описание!'),
+  priority: yup.string().oneOf(Object.keys(PRIORITIES)).required(),
   status: yup.boolean(),
 })
 
 export default function ModalEdit({ task, onSave, onClose }) {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { title: task.title, description: task.description, status: task.status },
+    defaultValues: { title: task.title, description: task.description, status: task.status, priority: task.priority ?? 'normal' },
   })
 
   return (
@@ -29,10 +31,22 @@ export default function ModalEdit({ task, onSave, onClose }) {
             {...register('description')} />
           {errors.description && <p className="err">{errors.description.message}</p>}
         </div>
+        <div className="flex items-center gap-2 text-sm">
+          <span>Приоритет:</span>
+          {Object.entries(PRIORITIES).map(([key, p]) => (
+            <label key={key} className="cursor-pointer">
+              <input type="radio" value={key} className="peer sr-only" {...register('priority')} />
+              <span className={`block rounded-full px-3 py-1 text-xs opacity-50 ring-offset-1 peer-checked:opacity-100 peer-checked:ring-2 peer-checked:ring-black peer-focus-visible:ring-2 ${p.cls}`}>
+                {p.label}
+              </span>
+            </label>
+          ))}
+        </div>
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" {...register('status')} /> Выполнено
         </label>
         <div className="flex justify-end gap-2">
+          
           <button type="button" onClick={onClose} className="btn-outline">Отмена</button>
           <button type="submit" disabled={isSubmitting}
             className="rounded-full bg-brand px-5 py-1 text-xs text-white hover:bg-blue-700 disabled:opacity-60">
